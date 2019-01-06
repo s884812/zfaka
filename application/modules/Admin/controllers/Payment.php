@@ -52,7 +52,7 @@ class PaymentController extends AdminBasicController
             }
 			
             $limits = "{$pagenum},{$limit}";
-			$items=$this->m_payment->Where($where)->Limit($limits)->Order(array('id'=>'DESC'))->Select();
+			$items=$this->m_payment->Field(array('id','payment','alias','app_id','active'))->Where($where)->Limit($limits)->Order(array('id'=>'DESC'))->Select();
 			
             if (empty($items)) {
                 $data = array('code'=>1002,'count'=>0,'data'=>array(),'msg'=>'无数据');
@@ -93,6 +93,7 @@ class PaymentController extends AdminBasicController
 		$method = $this->getPost('method',false);
 		$id = $this->getPost('id',false);
 		$payname = $this->getPost('payname',false);
+		$payimage = $this->getPost('payimage',false);
 		$sign_type = $this->getPost('sign_type',false);
 		$app_id = $this->getPost('app_id',false);
 		$app_secret = $this->getPost('app_secret',false);
@@ -119,7 +120,11 @@ class PaymentController extends AdminBasicController
 					'active'=>$active,
 				);
 				
-				$sign=array('RSA','RSA2');
+				if(isset($payimage) AND strlen($payimage)>0){
+					$m['payimage']=$payimage;
+				}
+				
+				$sign=array('RSA','RSA2','MD5','HMAC-SHA256');
 				if(isset($sign_type) AND strlen($sign_type)>0 AND in_array($sign_type,$sign)){
 					$m['sign_type']=$sign_type;
 				}
