@@ -103,7 +103,9 @@ INSERT INTO `t_config` (`id`, `catid`, `name`, `value`, `tag`, `lock`, `updateti
 (26, 1, 'discountswitch', '0', '折扣开关', 1, 1453452674),
 (27, 1, 'qrserver', '/product/order/showqr/?url=', '生成二维码的服务地址,默认请填写:/product/order/showqr/?url=', 1, 1453452674),
 (28, 1, 'paysubjectswitch', '0', '订单说明显示:0商品名,1订单号', 1, 1453452674),
-(29, 1, 'tplproduct', 'default', '商品详情页模版', '1', 1546063186);
+(29, 1, 'tplproduct', 'default', '商品详情页模版', '1', 1546063186),
+(30, 1, 'emailswitch', '1', '发送用户邮件开关', '1', 1546063186),
+(31, 1, 'emailsendtypeswitch', '1', '发送用户邮件方式筛选开关', '1', '1546063186');
 -- --------------------------------------------------------
 
 --
@@ -137,7 +139,8 @@ CREATE TABLE IF NOT EXISTS `t_email` (
   `sendmail` varchar(255) NOT NULL DEFAULT '' COMMENT '	发件人email',
   `sendname` varchar(255) NOT NULL DEFAULT '' COMMENT '发送人昵称',
   `port` varchar(55) NOT NULL DEFAULT '' COMMENT '端口号',
-  `host` varchar(255) NOT NULL DEFAULT '' COMMENT '发送邮件服务端'
+  `host` varchar(255) NOT NULL DEFAULT '' COMMENT '发送邮件服务端',
+  `isssl` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '0关，1开'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -241,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `t_payment` (
   `payname` varchar(55) NOT NULL DEFAULT '' COMMENT '显示名称',
   `payimage` varchar(250) NOT NULL DEFAULT '' COMMENT '图片',
   `alias` varchar(55) NOT NULL DEFAULT '' COMMENT '别名',
-  `sign_type` enum('RSA','RSA2','MD5') NOT NULL DEFAULT 'RSA2',
+  `sign_type` enum('RSA','RSA2','MD5','HMAC-SHA256') NOT NULL DEFAULT 'RSA2',
   `app_id` varchar(255) NOT NULL DEFAULT '',
   `app_secret` varchar(255) NOT NULL DEFAULT '',
   `ali_public_key` text,
@@ -288,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `t_products` (
   `sort_num` int(11) NOT NULL DEFAULT '1' COMMENT '排序',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   `isdelete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未删除,1已删除',
-  `imgurl` text NOT NULL COMMENT '产品图片'
+  `imgurl` text NOT NULL DEFAULT '' COMMENT '产品图片'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 --
